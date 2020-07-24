@@ -50,7 +50,7 @@ func (this *postgresPowerstatsRepo) Create(ctx context.Context, powerstats *enti
 }
 
 func (this *postgresPowerstatsRepo) FindBySuperID(ctx context.Context, superID int64) (*entities.Powerstats, error) {
-	query := "SELECT id, uuid, super_id, intelligence, strength, speed, durability, power, combat, created_at, updated_at FROM super_heroe_powerstats WHERE uuid=$1"
+	query := "SELECT id, uuid, super_id, intelligence, strength, speed, durability, power, combat, created_at, updated_at FROM super_heroe_powerstats WHERE id=$1"
 
 	rows, err := this.fetch(ctx, query, superID)
 	if err != nil {
