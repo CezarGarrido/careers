@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/CezarGarrido/careers/driver"
 	httpHandler "github.com/CezarGarrido/careers/handlers/http"
+	"github.com/CezarGarrido/careers/migrate"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
@@ -23,14 +25,14 @@ func main() {
 
 	port := map[bool]string{true: os.Getenv("PORT"), false: "8084"}[os.Getenv("PORT") != ""]
 
-	// postgresSettings := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, portDB, user, password, dbname)
-
-	databaseURL, exists := os.LookupEnv("DATABASE_URL")
-	if !exists {
-		log.Panic("Variable DATABASE_URL not found")
-	}
+	databaseURL := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", os.Getenv("DATABASE_HOST"), os.Getenv("DATABASE_PORT"), os.Getenv("DATABASE_USER"), os.Getenv("DATABASE_PASSWORD"), os.Getenv("DATABASE_NAME"))
 
 	pgConnection, err := driver.OpenPostgres(databaseURL)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	err = migrate.New("postgres", "./migrations", pgConnection.SQL)
 	if err != nil {
 		log.Panic(err)
 	}
