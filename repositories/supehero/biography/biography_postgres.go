@@ -51,7 +51,7 @@ func (this *postgresBiographyRepo) Create(ctx context.Context, biography *entiti
 }
 
 func (this *postgresBiographyRepo) FindBySuperID(ctx context.Context, superID int64) (*entities.Biography, error) {
-	query := "SELECT id, uuid, super_id, fullname, alter_egos, aliases, place_of_birth, first_appearance, publisher, alignment, created_at, updated_at FROM super_hero_biography WHERE id=$1"
+	query := "SELECT id, uuid, super_id, fullname, alter_egos, aliases, place_of_birth, first_appearance, publisher, alignment, created_at, updated_at FROM super_hero_biography WHERE super_id=$1"
 
 	rows, err := this.fetch(ctx, query, superID)
 	if err != nil {
