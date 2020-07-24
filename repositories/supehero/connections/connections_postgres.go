@@ -20,7 +20,7 @@ type postgresConnectionsRepo struct {
 
 func (this *postgresConnectionsRepo) Create(ctx context.Context, connections *entities.Connections) (int64, error) {
 
-	query := `INSERT INTO super_hero_Connections (uuid, super_id, group_affiliation, relatives, created_at) VALUES($1,$2,$3,$4 RETURNING id`
+	query := `INSERT INTO super_hero_Connections (uuid, super_id, group_affiliation, relatives, created_at) VALUES($1,$2,$3,$4,$5)RETURNING id`
 
 	stmt, err := this.Conn.PrepareContext(ctx, query)
 	if err != nil {
@@ -46,7 +46,7 @@ func (this *postgresConnectionsRepo) Create(ctx context.Context, connections *en
 }
 
 func (this *postgresConnectionsRepo) FindBySuperID(ctx context.Context, superID int64) (*entities.Connections, error) {
-	query := "SELECT id, uuid, super_id, gender, race, height, weight, eye_color, hair_color, created_at updated_at FROM super_hero_Connections WHERE super_id=$1"
+	query := "SELECT id, uuid, super_id, gender, race, height, weight, eye_color, hair_color, created_at, updated_at FROM super_hero_Connections WHERE super_id=$1"
 
 	rows, err := this.fetch(ctx, query, superID)
 	if err != nil {
