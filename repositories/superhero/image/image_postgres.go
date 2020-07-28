@@ -20,7 +20,7 @@ type postgresImageRepo struct {
 
 func (this *postgresImageRepo) Create(ctx context.Context, image *entities.Image) (int64, error) {
 
-	query := `INSERT INTO super_hero_Image (uuid, super_id, url, created_at) VALUES($1,$2,$3,$4) RETURNING id`
+	query := `INSERT INTO super_hero_images (uuid, super_hero_id, url, created_at) VALUES($1,$2,$3,$4) RETURNING id`
 
 	stmt, err := this.Conn.PrepareContext(ctx, query)
 	if err != nil {
@@ -45,7 +45,7 @@ func (this *postgresImageRepo) Create(ctx context.Context, image *entities.Image
 }
 
 func (this *postgresImageRepo) FindBySuperID(ctx context.Context, superID int64) (*entities.Image, error) {
-	query := "SELECT id, uuid, super_id, url, created_at, updated_at FROM super_hero_Image WHERE super_id=$1"
+	query := "SELECT id, uuid, super_hero_id, url, created_at, updated_at FROM super_hero_Image WHERE super_hero_id=$1"
 
 	rows, err := this.fetch(ctx, query, superID)
 	if err != nil {

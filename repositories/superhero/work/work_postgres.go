@@ -20,7 +20,7 @@ type postgresWorkRepo struct {
 
 func (this *postgresWorkRepo) Create(ctx context.Context, work *entities.Work) (int64, error) {
 
-	query := `INSERT INTO super_hero_work (uuid, super_id, occupation, base_work, created_at) VALUES($1,$2,$3,$4,$5) RETURNING id`
+	query := `INSERT INTO super_hero_works (uuid, super_hero_id, occupation, base, created_at) VALUES($1,$2,$3,$4,$5) RETURNING id`
 
 	stmt, err := this.Conn.PrepareContext(ctx, query)
 	if err != nil {
@@ -46,7 +46,7 @@ func (this *postgresWorkRepo) Create(ctx context.Context, work *entities.Work) (
 }
 
 func (this *postgresWorkRepo) FindBySuperID(ctx context.Context, superID int64) (*entities.Work, error) {
-	query := "SELECT id, uuid, super_id, occupation, base_work, created_at, updated_at FROM super_hero_work WHERE super_id=$1"
+	query := "SELECT id, uuid, super_hero_id, occupation, base, created_at, updated_at FROM super_hero_work WHERE super_hero_id=$1"
 
 	rows, err := this.fetch(ctx, query, superID)
 	if err != nil {

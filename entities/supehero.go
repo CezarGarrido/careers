@@ -21,3 +21,10 @@ func (this *SuperHero) Validate() error {
 	}
 	return nil
 }
+
+func NewSuperHero(SuperHeroApiID int64, Name string) *SuperHero {
+	return &SuperHero{
+		SuperHeroApiID: SuperHeroApiID,
+		Name:           Name,
+	}
+}

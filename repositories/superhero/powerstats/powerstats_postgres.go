@@ -20,7 +20,7 @@ type postgresPowerstatsRepo struct {
 
 func (this *postgresPowerstatsRepo) Create(ctx context.Context, powerstats *entities.Powerstats) (int64, error) {
 
-	query := `INSERT INTO super_heroe_powerstats (uuid, super_id, intelligence, strength, speed, durability, power, combat, created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id`
+	query := `INSERT INTO super_hero_powerstats (uuid, super_hero_id, intelligence, strength, speed, durability, power, combat, created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id`
 
 	stmt, err := this.Conn.PrepareContext(ctx, query)
 	if err != nil {
@@ -50,7 +50,7 @@ func (this *postgresPowerstatsRepo) Create(ctx context.Context, powerstats *enti
 }
 
 func (this *postgresPowerstatsRepo) FindBySuperID(ctx context.Context, superID int64) (*entities.Powerstats, error) {
-	query := "SELECT id, uuid, super_id, intelligence, strength, speed, durability, power, combat, created_at, updated_at FROM super_heroe_powerstats WHERE super_id=$1"
+	query := "SELECT id, uuid, super_hero_id, intelligence, strength, speed, durability, power, combat, created_at, updated_at FROM super_hero_powerstats WHERE super_hero_id=$1"
 
 	rows, err := this.fetch(ctx, query, superID)
 	if err != nil {

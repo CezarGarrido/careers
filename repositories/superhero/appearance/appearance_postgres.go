@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"strings"
 
 	"github.com/CezarGarrido/careers/entities"
 )
@@ -20,7 +21,7 @@ type postgresAppearanceRepo struct {
 
 func (this *postgresAppearanceRepo) Create(ctx context.Context, appearance *entities.Appearance) (int64, error) {
 
-	query := `INSERT INTO super_hero_appearance (uuid, super_id, gender, race, height, weight, eye_color, hair_color, created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id`
+	query := `INSERT INTO super_hero_appearance (uuid, super_hero_id, gender, race, height, weight, eye_color, hair_color, created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id`
 
 	stmt, err := this.Conn.PrepareContext(ctx, query)
 	if err != nil {
@@ -34,8 +35,8 @@ func (this *postgresAppearanceRepo) Create(ctx context.Context, appearance *enti
 		appearance.SuperID,
 		appearance.Gender,
 		appearance.Race,
-		appearance.Height,
-		appearance.Weight,
+		strings.Join(appearance.Height, ","),
+		strings.Join(appearance.Weight, ","),
 		appearance.EyeColor,
 		appearance.HairColor,
 		appearance.CreatedAt,
@@ -50,7 +51,7 @@ func (this *postgresAppearanceRepo) Create(ctx context.Context, appearance *enti
 }
 
 func (this *postgresAppearanceRepo) FindBySuperID(ctx context.Context, superID int64) (*entities.Appearance, error) {
-	query := "SELECT id, uuid, super_id, gender, race, height, weight, eye_color, hair_color, created_at updated_at FROM super_hero_appearance WHERE super_id=$1"
+	query := "SELECT id, uuid, super_hero_id, gender, race, height, weight, eye_color, hair_color, created_at updated_at FROM super_hero_appearance WHERE super_hero_id=$1"
 
 	rows, err := this.fetch(ctx, query, superID)
 	if err != nil {

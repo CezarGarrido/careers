@@ -13,14 +13,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// const (
-// 	host     = "localhost"
-// 	portDB   = "5432"
-// 	user     = "postgres"
-// 	password = "C102030g"
-// 	dbname   = "app_advogados"
-// )
-
 func main() {
 
 	port := map[bool]string{true: os.Getenv("PORT"), false: "8084"}[os.Getenv("PORT") != ""]
@@ -39,7 +31,11 @@ func main() {
 
 	r := mux.NewRouter()
 
-	superHeroHandlerHttp := httpHandler.NewSuperHero(pgConnection)
+	superHeroHandlerHttp := httpHandler.NewSuperHero(
+		pgConnection,
+		"https://superheroapi.com/api",
+		"1426431747558534",
+	)
 
 	r.HandleFunc("/api/v1/superhero", superHeroHandlerHttp.Create).Methods("POST")
 

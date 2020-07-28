@@ -10,3 +10,15 @@ type Powerstats struct {
 	Power        string `json:"power"`
 	Combat       string `json:"combat"`
 }
+
+func NewPowerstats(SuperID int64, Intelligence, Strength, Speed, Durability, Power, Combat string) *Powerstats {
+	return &Powerstats{
+		SuperID:      SuperID,
+		Intelligence: Intelligence,
+		Strength:     Strength,
+		Speed:        Speed,
+		Durability:   Durability,
+		Power:        Power,
+		Combat:       Combat,
+	}
+}

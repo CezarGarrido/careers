@@ -20,7 +20,7 @@ type postgresSuperHeroRepo struct {
 
 func (this *postgresSuperHeroRepo) Create(ctx context.Context, superHero *entities.SuperHero) (int64, error) {
 
-	query := `INSERT INTO super_heroes (uuid, name, created_at) VALUES($1,$2,$3) RETURNING id`
+	query := `INSERT INTO super_heroes (uuid, super_hero_api_id, name, created_at) VALUES($1,$2,$3,$4) RETURNING id`
 
 	stmt, err := this.Conn.PrepareContext(ctx, query)
 	if err != nil {
@@ -31,6 +31,7 @@ func (this *postgresSuperHeroRepo) Create(ctx context.Context, superHero *entiti
 
 	err = stmt.QueryRowContext(ctx,
 		superHero.UUID,
+		superHero.SuperHeroApiID,
 		superHero.Name,
 		superHero.CreatedAt,
 	).Scan(&returnID)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"strings"
 
 	"github.com/CezarGarrido/careers/entities"
 )
@@ -20,7 +21,7 @@ type postgresBiographyRepo struct {
 
 func (this *postgresBiographyRepo) Create(ctx context.Context, biography *entities.Biography) (int64, error) {
 
-	query := `INSERT INTO super_hero_biography (uuid, super_id, fullname, alter_egos, aliases, place_of_birth, first_appearance, publisher, alignment, created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`
+	query := `INSERT INTO super_hero_biography (uuid, super_hero_id, fullname, alter_egos, aliases, place_of_birth, first_appearance, publisher, alignment, created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`
 
 	stmt, err := this.Conn.PrepareContext(ctx, query)
 	if err != nil {
@@ -34,7 +35,7 @@ func (this *postgresBiographyRepo) Create(ctx context.Context, biography *entiti
 		biography.SuperID,
 		biography.FullName,
 		biography.AlterEgos,
-		biography.Aliases,
+		strings.Join(biography.Aliases, ","),
 		biography.PlaceOfBirth,
 		biography.FirstAppearance,
 		biography.Publisher,
@@ -51,7 +52,7 @@ func (this *postgresBiographyRepo) Create(ctx context.Context, biography *entiti
 }
 
 func (this *postgresBiographyRepo) FindBySuperID(ctx context.Context, superID int64) (*entities.Biography, error) {
-	query := "SELECT id, uuid, super_id, fullname, alter_egos, aliases, place_of_birth, first_appearance, publisher, alignment, created_at, updated_at FROM super_hero_biography WHERE super_id=$1"
+	query := "SELECT id, uuid, super_hero_id, fullname, alter_egos, aliases, place_of_birth, first_appearance, publisher, alignment, created_at, updated_at FROM super_hero_biography WHERE super_hero_id=$1"
 
 	rows, err := this.fetch(ctx, query, superID)
 	if err != nil {
